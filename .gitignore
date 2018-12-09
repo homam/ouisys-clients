@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.DS_Store
+npm-debug.log
+yarn-error.log
+ecosystem.config.js
+output/
+bower_components/
+.psci_modules
+.psc-ide-port
+*.styl.d.ts
+*.css.d.ts
+*.less.d.ts
+vscode
