@@ -1,0 +1,73 @@
+import * as React from "react"
+import * as TAPI from "./TolaAPI"
+import * as RDS from "../../common-types/RemoteDataState"
+import ITracker from "../../common-types/ITracker";
+import IVisitor from "../../common-types/IVisitor";
+
+export type TolaRDS = TAPI.TolaRDS
+export type ITolaProps = {
+  currentState: TAPI.TolaRDS;
+  actions: TAPI.ITolaActions;
+};
+
+export type TolaFailure = TAPI.TolaFailure
+export type TolaSuccess = TAPI.TolaSuccess
+
+export function match<R>
+  (matcher: RDS.IMatcher<TAPI.TolaFailure, TAPI.TolaSuccess, R>)
+  { return (rds: TolaRDS) => RDS.match(matcher)(rds) }
+
+export function MatchSuccess<R>(matcher: RDS.ISuccessMatcher<TolaFailure, TolaSuccess, R>){
+  return (rds: TolaRDS) => RDS.MatchSuccess(matcher)(rds)
+}
+
+export default (tracker: ITracker, visitor: IVisitor) => (Comp: React.ComponentType<ITolaProps>) => (initState: TAPI.TolaRDS) => 
+  class HOC extends React.Component {
+    state: {
+      current: TAPI.TolaRDS;
+    };
+    actions: TAPI.ITolaActions; 
+    constructor(props: any) {
+      super(props);
+      this.state = {
+        current: initState
+      };
+      const self = this;
+      this.actions = {
+        chargeAndWait: (msisdn: string, message: string, price: number) =>  {
+          if(!msisdn || msisdn.length == 0) {
+            self.setState({current: RDS.Failure({type: "InvalidMSISDN"}) as TolaRDS})
+            return ;
+          }
+          return TAPI.chargeAndWait(visitor, msisdn, message, price, st => {
+            self.setState({ current: st })
+            RDS.match<TolaFailure, TolaSuccess, void>({
+              loading: () => tracker.advancedInFlow('tola', 'chargeAndWait', {msisdn, message, price}),
+              success: () => tracker.advancedInFlow('tola', 'success', {msisdn, message, price}),
+              failure: (error) => tracker.recedeInFlow('tola', 'failure', {error: error.type}),
+              nothingYet: () => void 8
+            })(st)
+          }
+          )
+        },
+        backToNothingYet: () => self.setState({ current: RDS.NothingYet() })
+      };
+    }
+
+    render() {
+      const self = this;
+      return (
+        <Comp
+          actions={self.actions}
+          currentState={self.state.current}
+          {...this.props}
+        />
+      );
+    }
+  }
+
+
+export const mockLoadingState = RDS.Loading() as TolaRDS
+export const mockSuccessState = RDS.Success({}) as TolaRDS;
+export const mockFailureState = (err : TolaFailure) => RDS.Failure(err) as TolaRDS;
+export const initialState = RDS.NothingYet() as TolaRDS
