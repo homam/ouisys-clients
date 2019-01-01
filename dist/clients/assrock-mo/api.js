@@ -24,9 +24,9 @@ var defaultConfig = function defaultConfig(country, offer) {
     case "my":
       return {
         offer: offer || 1,
-        host: 'm.gamezones.biz',
-        country: 'my',
-        handle: 'api-handle'
+        host: "m.gamezones.biz",
+        country: "my",
+        handle: "api-handle"
       };
 
     default:
@@ -34,47 +34,48 @@ var defaultConfig = function defaultConfig(country, offer) {
   }
 };
 
-function submitMSISDN(_x, _x2, _x3, _x4) {
+function submitMSISDN(_x, _x2, _x3) {
   return _submitMSISDN.apply(this, arguments);
 }
 
 function _submitMSISDN() {
   _submitMSISDN = _asyncToGenerator(
   /*#__PURE__*/
-  _regenerator.default.mark(function _callee(window, visitor, maybeConfig, msisdn) {
-    var config, _ref, host, country, handle, offer, search, result, error;
+  _regenerator.default.mark(function _callee(window, maybeConfig, msisdn) {
+    var visitor, config, _ref, host, country, handle, offer, search, result, error;
 
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            visitor = window.pac_analytics.visitor;
             config = !maybeConfig ? {
               offer: visitor.offer
             } : maybeConfig;
-            _ref = !config.host || !config.handle ? defaultConfig(visitor.country, config.offer) : config, host = _ref.host, country = _ref.country, handle = _ref.handle, offer = _ref.offer;
-            search = window.location.search.substr(1) || '';
-            _context.next = 5;
+            _ref = !config.host || !config.handle ? defaultConfig(process.env.REACT_APP_COUNTRY, config.offer) : config, host = _ref.host, country = _ref.country, handle = _ref.handle, offer = _ref.offer;
+            search = window.location.search.substr(1) || "";
+            _context.next = 6;
             return fetch("https://lp-api.sam-media.com/v1/submit_msisdn_mo/".concat(host, "/").concat(country, "/").concat(handle, "/").concat(offer, "/?msisdn=").concat(msisdn, "&rockman_id=").concat(visitor.rockmanId, "&").concat(search)).then(function (x) {
               return x.json();
             });
 
-          case 5:
+          case 6:
             result = _context.sent;
 
             if (result.isValid) {
-              _context.next = 13;
+              _context.next = 14;
               break;
             }
 
             error = new Error("".concat(result.errorType, ":\n").concat(result.errorText));
-            error['type'] = result.errorType;
+            error["type"] = result.errorType;
             console.error(error);
             throw error;
 
-          case 13:
+          case 14:
             return _context.abrupt("return", result.keyword);
 
-          case 14:
+          case 15:
           case "end":
             return _context.stop();
         }

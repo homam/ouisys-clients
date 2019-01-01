@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.match = match;
-exports.MOLink = exports.default = exports.mockedCompletedState = exports.mockedMSISDNEntrySuccess = exports.initialState = void 0;
+exports.MOLink = exports.default = exports.mockLoadingState = exports.mockMSISDNEntrySuccessState = exports.initialState = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -50,35 +50,37 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 var initialState = {
   type: "MSISDNEntry",
   result: RDS.NothingYet()
 };
 exports.initialState = initialState;
-var mockedMSISDNEntrySuccess = {
+var mockMSISDNEntrySuccessState = {
   type: "MSISDNEntry",
   result: RDS.Success({
-    keyword: 'TEST OK',
-    shortcode: '666'
+    keyword: "TEST OK",
+    shortcode: "666"
   })
 };
-exports.mockedMSISDNEntrySuccess = mockedMSISDNEntrySuccess;
-var mockedCompletedState = {
-  type: "Completed",
-  result: void 6
+exports.mockMSISDNEntrySuccessState = mockMSISDNEntrySuccessState;
+var mockLoadingState = {
+  type: "MSISDNEntry",
+  result: RDS.Loading()
 };
-exports.mockedCompletedState = mockedCompletedState;
+exports.mockLoadingState = mockLoadingState;
 
 function match(_ref) {
-  var msisdnEntry = _ref.msisdnEntry,
-      completed = _ref.completed;
+  var msisdnEntry = _ref.msisdnEntry;
   return function (state) {
     switch (state.type) {
-      case 'MSISDNEntry':
+      case "MSISDNEntry":
         return msisdnEntry(state.result);
-
-      case 'Completed':
-        return completed(state.result);
     }
   };
 }
@@ -137,7 +139,7 @@ var _default = function _default(tracker, Comp) {
                           }
 
                           msisdn = args[2];
-                          tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', {
+                          tracker.advancedInFlow("assrock/v1", "msisdn-submitted", {
                             msisdn: msisdn
                           });
                           _context.prev = 4;
@@ -146,7 +148,7 @@ var _default = function _default(tracker, Comp) {
 
                         case 7:
                           keywordAndShortcode = _context.sent;
-                          tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', {
+                          tracker.advancedInFlow("assrock/v1", "msisdn-submission-success", {
                             msisdn: msisdn
                           });
                           self.setState({
@@ -156,12 +158,13 @@ var _default = function _default(tracker, Comp) {
                             },
                             actions: _objectSpread({}, self.state.actions)
                           });
-                          _context.next = 17;
+                          _context.next = 18;
                           break;
 
                         case 12:
                           _context.prev = 12;
                           _context.t0 = _context["catch"](4);
+                          console.error(_context.t0);
                           _errorType = "SEAlreadySubscribed" === _context.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context.t0.type ? "InvalidMSISDN" : "UnknownError";
                           self.setState({
                             currentState: {
@@ -172,12 +175,12 @@ var _default = function _default(tracker, Comp) {
                               })
                             }
                           });
-                          tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', {
+                          tracker.recedeInFlow("assrock/v1", "msisdn-submission-failure", {
                             msisdn: msisdn,
-                            errorType: _errorType || 'UnknownError'
+                            errorType: _errorType || "UnknownError"
                           });
 
-                        case 17:
+                        case 18:
                         case "end":
                           return _context.stop();
                       }
@@ -228,10 +231,12 @@ var formatSMSLink = function formatSMSLink(keywordAndShortcode) {
 
 var MOLink = function MOLink(_ref2) {
   var keywordAndShortcode = _ref2.keywordAndShortcode,
-      children = _ref2.children;
-  return React.createElement("a", {
+      children = _ref2.children,
+      props = _objectWithoutProperties(_ref2, ["keywordAndShortcode", "children"]);
+
+  return React.createElement("a", _extends({
     href: formatSMSLink(keywordAndShortcode)
-  }, children);
+  }, props), children);
 };
 
 exports.MOLink = MOLink;
@@ -247,8 +252,8 @@ exports.MOLink = MOLink;
   }
 
   reactHotLoader.register(initialState, "initialState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(mockedMSISDNEntrySuccess, "mockedMSISDNEntrySuccess", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(mockedCompletedState, "mockedCompletedState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
+  reactHotLoader.register(mockMSISDNEntrySuccessState, "mockMSISDNEntrySuccessState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
+  reactHotLoader.register(mockLoadingState, "mockLoadingState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
   reactHotLoader.register(match, "match", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
   reactHotLoader.register(formatSMSLink, "formatSMSLink", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
   reactHotLoader.register(MOLink, "MOLink", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");

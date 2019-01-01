@@ -1,10 +1,10 @@
 {
   "name": "ouisys-clients",
-  "version": "0.0.3",
+  "version": "0.0.9",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npx babel ./src --out-dir dist --extensions \".ts,.tsx\"",
+    "build": "npx babel ./src --out-dir dist --extensions \".ts,.tsx\" && yarn build:types",
     "build:types": "tsc --emitDeclarationOnly",
     "build:init": "tsc --init --declaration --allowSyntheticDefaultImports --target esnext --outDir dist"
   },
@@ -12,7 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "ramda": "^0.26.1",
-    "react": "^16.6.3"
+    "react": "^16.6.3",
+    "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.3.3",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.0",
@@ -38,6 +41,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
     "@babel/runtime": "^7.2.0",
+    "@types/node": "^10.12.18",
     "@types/ramda": "^0.25.42",
     "@types/react": "^16.7.13",
     "@types/react-dom": "^16.0.11",

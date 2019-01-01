@@ -1,4 +1,3 @@
-import IVisitor from "../../common-types/IVisitor";
 export interface IConfig {
     host?: string;
     handle?: string;
@@ -16,4 +15,4 @@ export declare type IResult = {
     submissionId?: string;
     keyword: IKeywordShortcode;
 };
-export default function submitMSISDN(window: Window, visitor: IVisitor, maybeConfig: IConfig, msisdn: string): Promise<IKeywordShortcode>;
+export default function submitMSISDN(window: Window, maybeConfig: IConfig, msisdn: string): Promise<IKeywordShortcode>;
