@@ -4,13 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.match = match;
-exports.MOLink = exports.formatSMSLink = exports.default = exports.mockLoadingState = exports.mockMSISDNEntrySuccessState = exports.initialState = void 0;
+exports.default = exports.mockedCompletedState = exports.mockedPINState = exports.initialState = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var React = _interopRequireWildcard(require("react"));
 
-var _api = _interopRequireDefault(require("./api"));
+var _main = _interopRequireDefault(require("./main"));
 
 var RDS = _interopRequireWildcard(require("../../common-types/RemoteDataState"));
 
@@ -25,6 +25,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })();
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -50,37 +52,39 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
 var initialState = {
   type: "MSISDNEntry",
   result: RDS.NothingYet()
 };
 exports.initialState = initialState;
-var mockMSISDNEntrySuccessState = {
-  type: "MSISDNEntry",
-  result: RDS.Success({
-    keyword: "TEST OK",
-    shortcode: "666"
-  })
+var mockedPINState = {
+  type: "PINEntry",
+  result: RDS.NothingYet()
 };
-exports.mockMSISDNEntrySuccessState = mockMSISDNEntrySuccessState;
-var mockLoadingState = {
-  type: "MSISDNEntry",
-  result: RDS.Loading()
+exports.mockedPINState = mockedPINState;
+var mockedCompletedState = {
+  type: "Completed",
+  result: {
+    finalUrl: 'https://www.yahoo.com/'
+  } // export const initialState : State = { type: "PINEntry", result: RDS.NothingYet<PINEntryFailure, PINEntrySuccess>()}
+
 };
-exports.mockLoadingState = mockLoadingState;
+exports.mockedCompletedState = mockedCompletedState;
 
 function match(_ref) {
-  var msisdnEntry = _ref.msisdnEntry;
+  var msisdnEntry = _ref.msisdnEntry,
+      pinEntry = _ref.pinEntry,
+      completed = _ref.completed;
   return function (state) {
     switch (state.type) {
-      case "MSISDNEntry":
+      case 'MSISDNEntry':
         return msisdnEntry(state.result);
+
+      case 'PINEntry':
+        return pinEntry(state.result);
+
+      case 'Completed':
+        return completed(state.result);
     }
   };
 }
@@ -114,18 +118,18 @@ var _default = function _default(tracker, Comp) {
               submitMSISDN: function () {
                 var _submitMSISDN2 = _asyncToGenerator(
                 /*#__PURE__*/
-                _regenerator.default.mark(function _callee() {
+                _regenerator.default.mark(function _callee2() {
                   var _len,
                       args,
                       _key,
                       msisdn,
-                      keywordAndShortcode,
-                      _errorType,
-                      _args = arguments;
+                      _submitPIN,
+                      _errorType2,
+                      _args2 = arguments;
 
-                  return _regenerator.default.wrap(function _callee$(_context) {
+                  return _regenerator.default.wrap(function _callee2$(_context2) {
                     while (1) {
-                      switch (_context.prev = _context.next) {
+                      switch (_context2.prev = _context2.next) {
                         case 0:
                           _this.setState({
                             currentState: {
@@ -134,58 +138,133 @@ var _default = function _default(tracker, Comp) {
                             }
                           });
 
-                          for (_len = _args.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-                            args[_key] = _args[_key];
+                          for (_len = _args2.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+                            args[_key] = _args2[_key];
                           }
 
                           msisdn = args[2];
-                          tracker.advancedInFlow("assrock/v1", "msisdn-submitted", {
+                          tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', {
                             msisdn: msisdn
                           });
-                          _context.prev = 4;
-                          _context.next = 7;
-                          return _api.default.apply(void 0, args);
+                          _context2.prev = 4;
+                          _context2.next = 7;
+                          return _main.default.apply(void 0, args);
 
                         case 7:
-                          keywordAndShortcode = _context.sent;
-                          tracker.advancedInFlow("assrock/v1", "msisdn-submission-success", {
+                          _submitPIN = _context2.sent;
+                          tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', {
                             msisdn: msisdn
                           });
                           self.setState({
                             currentState: {
-                              type: "MSISDNEntry",
-                              result: RDS.Success(keywordAndShortcode)
+                              type: "PINEntry",
+                              result: RDS.NothingYet()
                             },
-                            actions: _objectSpread({}, self.state.actions)
+                            actions: _objectSpread({}, self.state.actions, {
+                              submitPIN: function () {
+                                var _submitPIN2 = _asyncToGenerator(
+                                /*#__PURE__*/
+                                _regenerator.default.mark(function _callee(pin) {
+                                  var _result, _errorType;
+
+                                  return _regenerator.default.wrap(function _callee$(_context) {
+                                    while (1) {
+                                      switch (_context.prev = _context.next) {
+                                        case 0:
+                                          _this.setState({
+                                            currentState: {
+                                              type: "PINEntry",
+                                              result: RDS.Loading()
+                                            }
+                                          });
+
+                                          tracker.advancedInFlow('assrock/v1', 'pin-submitted', {
+                                            msisdn: msisdn,
+                                            pin: pin
+                                          });
+                                          _context.prev = 2;
+                                          _context.next = 5;
+                                          return _submitPIN(pin);
+
+                                        case 5:
+                                          _result = _context.sent;
+                                          tracker.advancedInFlow('assrock/v1', 'pin-submission-success', {
+                                            msisdn: msisdn,
+                                            pin: pin
+                                          });
+
+                                          _this.setState({
+                                            currentState: {
+                                              type: "PINEntry",
+                                              result: RDS.Success({
+                                                finalUrl: _result
+                                              })
+                                            }
+                                          });
+
+                                          _context.next = 15;
+                                          break;
+
+                                        case 10:
+                                          _context.prev = 10;
+                                          _context.t0 = _context["catch"](2);
+                                          _errorType = "SEInvalidPIN" === _context.t0.type ? "InvalidPIN" : "UnknownError";
+                                          self.setState({
+                                            currentState: {
+                                              type: "PINEntry",
+                                              result: RDS.Failure({
+                                                errorType: _errorType
+                                              })
+                                            }
+                                          });
+                                          tracker.recedeInFlow('assrock/v1', 'pin-submission-failure', {
+                                            msisdn: msisdn,
+                                            pin: pin
+                                          });
+
+                                        case 15:
+                                        case "end":
+                                          return _context.stop();
+                                      }
+                                    }
+                                  }, _callee, this, [[2, 10]]);
+                                }));
+
+                                function submitPIN(_x) {
+                                  return _submitPIN2.apply(this, arguments);
+                                }
+
+                                return submitPIN;
+                              }()
+                            })
                           });
-                          _context.next = 18;
+                          _context2.next = 17;
                           break;
 
                         case 12:
-                          _context.prev = 12;
-                          _context.t0 = _context["catch"](4);
-                          console.error(_context.t0);
-                          _errorType = "SEAlreadySubscribed" === _context.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context.t0.type ? "InvalidMSISDN" : "UnknownError";
+                          _context2.prev = 12;
+                          _context2.t0 = _context2["catch"](4);
+                          _errorType2 = "SEAlreadySubscribed" === _context2.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context2.t0.type ? "InvalidMSISDN" : "UnknownError";
                           self.setState({
                             currentState: {
                               type: "MSISDNEntry",
                               result: RDS.Failure({
-                                errorType: _errorType,
-                                error: _context.t0
+                                errorType: _errorType2,
+                                error: _context2.t0
                               })
                             }
                           });
-                          tracker.recedeInFlow("assrock/v1", "msisdn-submission-failure", {
+                          tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', {
                             msisdn: msisdn,
-                            errorType: _errorType || "UnknownError"
+                            errorType: _errorType2 || 'UnknownError'
                           });
 
-                        case 18:
+                        case 17:
                         case "end":
-                          return _context.stop();
+                          return _context2.stop();
                       }
                     }
-                  }, _callee, this, [[4, 12]]);
+                  }, _callee2, this, [[4, 12]]);
                 }));
 
                 function submitMSISDN() {
@@ -193,7 +272,17 @@ var _default = function _default(tracker, Comp) {
                 }
 
                 return submitMSISDN;
-              }()
+              }(),
+              submitPIN: function submitPIN(_pin) {
+                return self.setState({
+                  currentState: {
+                    type: "PINEntry",
+                    result: RDS.Failure({
+                      errorType: "TooEarly"
+                    })
+                  }
+                });
+              }
             }
           };
           return _this;
@@ -202,10 +291,10 @@ var _default = function _default(tracker, Comp) {
         _createClass(HOC, [{
           key: "render",
           value: function render() {
-            return React.createElement(Comp, {
+            return React.createElement(Comp, _extends({}, this.props, {
               currentState: this.state.currentState,
               actions: this.state.actions
-            });
+            }));
           }
         }, {
           key: "__reactstandin__regenerateByEval",
@@ -224,24 +313,6 @@ var _default = function _default(tracker, Comp) {
 
 var _default2 = _default;
 exports.default = _default2;
-
-var formatSMSLink = function formatSMSLink(keywordAndShortcode) {
-  return /iPhone/i.test(navigator.userAgent) || /Mac OS/i.test(navigator.userAgent) ? "sms:".concat(keywordAndShortcode.shortcode, "&body=").concat(keywordAndShortcode.keyword) : "sms:".concat(keywordAndShortcode.shortcode, "?body=").concat(keywordAndShortcode.keyword);
-};
-
-exports.formatSMSLink = formatSMSLink;
-
-var MOLink = function MOLink(_ref2) {
-  var keywordAndShortcode = _ref2.keywordAndShortcode,
-      children = _ref2.children,
-      props = _objectWithoutProperties(_ref2, ["keywordAndShortcode", "children"]);
-
-  return React.createElement("a", _extends({
-    href: formatSMSLink(keywordAndShortcode)
-  }, props), children);
-};
-
-exports.MOLink = MOLink;
 ;
 
 (function () {
@@ -253,13 +324,11 @@ exports.MOLink = MOLink;
     return;
   }
 
-  reactHotLoader.register(initialState, "initialState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(mockMSISDNEntrySuccessState, "mockMSISDNEntrySuccessState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(mockLoadingState, "mockLoadingState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(match, "match", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(formatSMSLink, "formatSMSLink", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(MOLink, "MOLink", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
-  reactHotLoader.register(_default, "default", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/HOC.tsx");
+  reactHotLoader.register(initialState, "initialState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-pin/HOC.tsx");
+  reactHotLoader.register(mockedPINState, "mockedPINState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-pin/HOC.tsx");
+  reactHotLoader.register(mockedCompletedState, "mockedCompletedState", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-pin/HOC.tsx");
+  reactHotLoader.register(match, "match", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-pin/HOC.tsx");
+  reactHotLoader.register(_default, "default", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-pin/HOC.tsx");
   leaveModule(module);
 })();
 

@@ -62,6 +62,7 @@ declare const _default: <P extends HOCProps>(tracker: ITracker, Comp: React.Comp
     contextType?: React.Context<any>;
 };
 export default _default;
+export declare const formatSMSLink: (keywordAndShortcode: IKeywordShortcode) => string;
 export declare const MOLink: ({ keywordAndShortcode, children, ...props }: {
     keywordAndShortcode: IKeywordShortcode;
     children: React.ReactNode;

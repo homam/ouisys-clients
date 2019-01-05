@@ -147,7 +147,7 @@ export default <P extends HOCProps>(
     }
   };
 
-const formatSMSLink = (keywordAndShortcode: IKeywordShortcode) =>
+export const formatSMSLink = (keywordAndShortcode: IKeywordShortcode) =>
   /iPhone/i.test(navigator.userAgent) || /Mac OS/i.test(navigator.userAgent)
     ? `sms:${keywordAndShortcode.shortcode}&body=${keywordAndShortcode.keyword}`
     : `sms:${keywordAndShortcode.shortcode}?body=${
