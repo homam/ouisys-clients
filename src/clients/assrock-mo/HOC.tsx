@@ -1,18 +1,23 @@
 import * as React from "react";
-import submitMSISDN, { IConfig, IKeywordShortcode } from "./api";
+import submitMSISDN, { IConfig, IKeywordShortcode } from "./main";
 import * as RDS from "../../common-types/RemoteDataState";
-import ITracker from "../../common-types/ITracker";
+import { ITracker } from "../../pacman/record";
 
 export type MSISDNEntryFailure = {
   errorType: MSISDNEntryErrorTypes;
   error: any;
 };
-export type MSISDNEntrySuccess = IKeywordShortcode;
+export type MSISDNEntrySuccess = IKeywordShortcode
 
-export type State = {
-  type: "MSISDNEntry";
-  result: RDS.RemoteDataState<MSISDNEntryFailure, MSISDNEntrySuccess>;
-};
+export type State =
+  | {
+    type: "MSISDNEntry";
+    result: RDS.RemoteDataState<MSISDNEntryFailure, MSISDNEntrySuccess>;
+  }
+  | {
+    type: 'Completed';
+    result: void;
+  };
 
 export type MSISDNEntryErrorTypes =
   | "AlreadySubscribed"
@@ -21,26 +26,14 @@ export type MSISDNEntryErrorTypes =
 
 export type PINEntryErrorTypes = "UnknownError" | "TooEarly" | "InvalidPIN";
 
-export const initialState: State = {
-  type: "MSISDNEntry",
-  result: RDS.NothingYet<MSISDNEntryFailure, MSISDNEntrySuccess>()
-};
-export const mockMSISDNEntrySuccessState: State = {
-  type: "MSISDNEntry",
-  result: RDS.Success<MSISDNEntryFailure, MSISDNEntrySuccess>({
-    keyword: "TEST OK",
-    shortcode: "666"
-  })
-};
-
-export const mockLoadingState = {
-  type: "MSISDNEntry",
-  result: RDS.Loading<MSISDNEntryFailure, MSISDNEntrySuccess>()
-};
+export const initialState: State = { type: "MSISDNEntry", result: RDS.NothingYet<MSISDNEntryFailure, MSISDNEntrySuccess>() }
+export const mockedMSISDNEntrySuccess: State = { type: "MSISDNEntry", result: RDS.Success<MSISDNEntryFailure, MSISDNEntrySuccess>({ keyword: 'TEST OK', shortcode: '666' }) }
+export const mockedMSISDNEntryFailure: State =  {type: "MSISDNEntry", result: RDS.Failure<MSISDNEntryFailure, MSISDNEntrySuccess>({ errorType: "InvalidMSISDN", error: "Invalid Mobile Number" })}
+export const mockedCompletedState: State = { type: "Completed", result: void 6 }
 
 export interface IActions {
-  submitMSISDN: (window: Window, config: IConfig, msisdn: string) => void;
-  backToStart: () => void;
+  submitMSISDN: (window: Window, config: IConfig, msisdn: string) => void,
+  backToStart: () => void
 }
 
 export type HOCProps = {
@@ -48,26 +41,26 @@ export type HOCProps = {
   actions: IActions;
 };
 
-export function match<R>({
-  msisdnEntry,
-}: {
-  msisdnEntry: (
-    rds: RDS.RemoteDataState<MSISDNEntryFailure, MSISDNEntrySuccess>
-  ) => R;
-}): (state: State) => R {
+export function match<R>(
+  { msisdnEntry, completed }:
+    {
+      msisdnEntry: (rds: RDS.RemoteDataState<MSISDNEntryFailure, MSISDNEntrySuccess>) => R
+      , completed: (result: void) => R
+    }): (state: State) => R {
   return state => {
     switch (state.type) {
-      case "MSISDNEntry":
-        return msisdnEntry(state.result);
+      case 'MSISDNEntry':
+        return msisdnEntry(state.result)
+      case 'Completed':
+        return completed(state.result)
     }
-  };
+  }
 }
 
-export default <P extends HOCProps>(
-  tracker: ITracker,
-  Comp: React.ComponentType<HOCProps>
-) => (initialState: State) =>
-  class HOC extends React.PureComponent {
+export default <P extends HOCProps>(tracker: ITracker, Comp: React.ComponentType<P>) => (
+  initialState: State
+) =>
+  class HOC extends React.PureComponent<P> {
     state: {
       currentState: State;
       actions: IActions;
@@ -81,43 +74,28 @@ export default <P extends HOCProps>(
           backToStart: () => {
             this.setState({
               currentState: initialState
-            });
+            })
           },
           submitMSISDN: async (...args) => {
             this.setState({
-              currentState: {
-                type: "MSISDNEntry",
-                result: RDS.Loading()
-              } as State
-            });
-            const [, , msisdn] = args;
-            tracker.advancedInFlow("assrock/v1", "msisdn-submitted", {
-              msisdn
-            });
+              currentState: { type: "MSISDNEntry", result: RDS.Loading() } as State
+            })
+            const [, , msisdn] = args
+            tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', { msisdn })
             try {
               const keywordAndShortcode = await submitMSISDN(...args);
-              tracker.advancedInFlow(
-                "assrock/v1",
-                "msisdn-submission-success",
-                { msisdn }
-              );
+              tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', { msisdn })
               self.setState({
-                currentState: {
-                  type: "MSISDNEntry",
-                  result: RDS.Success<MSISDNEntryFailure, MSISDNEntrySuccess>(
-                    keywordAndShortcode
-                  )
-                } as State,
+                currentState: { type: "MSISDNEntry", result: RDS.Success<MSISDNEntryFailure, MSISDNEntrySuccess>(keywordAndShortcode) } as State,
                 actions: { ...self.state.actions }
-              });
+              })
             } catch (ex) {
-              console.error(ex);
               const errorType: MSISDNEntryErrorTypes =
                 "SEAlreadySubscribed" === ex.type
                   ? "AlreadySubscribed"
                   : "SEInvalidMSISDN" == ex.type
-                  ? "InvalidMSISDN"
-                  : "UnknownError";
+                    ? "InvalidMSISDN"
+                    : "UnknownError";
               self.setState({
                 currentState: {
                   type: "MSISDNEntry",
@@ -127,10 +105,7 @@ export default <P extends HOCProps>(
                   })
                 } as State
               });
-              tracker.recedeInFlow("assrock/v1", "msisdn-submission-failure", {
-                msisdn,
-                errorType: errorType || "UnknownError"
-              });
+              tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', { msisdn, errorType: errorType || 'UnknownError' })
             }
           }
         }
@@ -139,26 +114,17 @@ export default <P extends HOCProps>(
 
     render() {
       return (
-        <Comp
-          currentState={this.state.currentState}
-          actions={this.state.actions}
-        />
+        <Comp {...this.props} currentState={this.state.currentState} actions={this.state.actions} />
       );
     }
   };
 
-export const formatSMSLink = (keywordAndShortcode: IKeywordShortcode) =>
-  /iPhone/i.test(navigator.userAgent) || /Mac OS/i.test(navigator.userAgent)
-    ? `sms:${keywordAndShortcode.shortcode}&body=${keywordAndShortcode.keyword}`
-    : `sms:${keywordAndShortcode.shortcode}?body=${
-        keywordAndShortcode.keyword
-      }`;
+const formatSMSLink = (keywordAndShortcode : IKeywordShortcode) =>
+  (typeof navigator != "undefined" && (/iPhone/i.test(navigator.userAgent) || /Mac OS/i.test(navigator.userAgent)))
+  ? `sms:${keywordAndShortcode.shortcode}&body=${keywordAndShortcode.keyword}`
+  : `sms:${keywordAndShortcode.shortcode}?body=${keywordAndShortcode.keyword}`
 
-export const MOLink = ({
-  keywordAndShortcode,
-  children,
-  ...props
-}: {
-  keywordAndShortcode: IKeywordShortcode;
-  children: React.ReactNode;
-} & React.HTMLAttributes<HTMLAnchorElement>) => <a href={formatSMSLink(keywordAndShortcode)} {...props}>{children}</a>;
+ 
+
+export const MOLink : React.ComponentType<{keywordAndShortcode: IKeywordShortcode, children: React.ReactNode} & React.HTMLAttributes<HTMLAnchorElement>> = ({keywordAndShortcode, children, ...props}) =>
+  <a href={formatSMSLink(keywordAndShortcode)} {...props}>{children}</a>

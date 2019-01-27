@@ -91,223 +91,224 @@ function match(_ref) {
 
 var _default = function _default(tracker, Comp) {
   return function (initialState) {
-    return (
-      /*#__PURE__*/
-      function (_React$PureComponent) {
-        _inherits(HOC, _React$PureComponent);
+    var _temp;
 
-        function HOC(props) {
-          var _this;
+    return _temp =
+    /*#__PURE__*/
+    function (_React$PureComponent) {
+      _inherits(HOC, _React$PureComponent);
 
-          _classCallCheck(this, HOC);
+      function HOC(props) {
+        var _this;
 
-          _this = _possibleConstructorReturn(this, _getPrototypeOf(HOC).call(this, props));
+        _classCallCheck(this, HOC);
 
-          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", void 0);
+        _this = _possibleConstructorReturn(this, _getPrototypeOf(HOC).call(this, props));
 
-          var self = _assertThisInitialized(_assertThisInitialized(_this));
+        _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", void 0);
 
-          _this.state = {
-            currentState: initialState,
-            actions: {
-              backToStart: function backToStart() {
-                _this.setState({
-                  currentState: initialState
-                });
-              },
-              submitMSISDN: function () {
-                var _submitMSISDN2 = _asyncToGenerator(
-                /*#__PURE__*/
-                _regenerator.default.mark(function _callee2() {
-                  var _len,
-                      args,
-                      _key,
-                      msisdn,
-                      _submitPIN,
-                      _errorType2,
-                      _args2 = arguments;
+        var self = _assertThisInitialized(_assertThisInitialized(_this));
 
-                  return _regenerator.default.wrap(function _callee2$(_context2) {
-                    while (1) {
-                      switch (_context2.prev = _context2.next) {
-                        case 0:
-                          _this.setState({
-                            currentState: {
-                              type: "MSISDNEntry",
-                              result: RDS.Loading()
-                            }
-                          });
+        _this.state = {
+          currentState: initialState,
+          actions: {
+            backToStart: function backToStart() {
+              _this.setState({
+                currentState: initialState
+              });
+            },
+            submitMSISDN: function () {
+              var _submitMSISDN2 = _asyncToGenerator(
+              /*#__PURE__*/
+              _regenerator.default.mark(function _callee2() {
+                var _len,
+                    args,
+                    _key,
+                    msisdn,
+                    _submitPIN,
+                    _errorType2,
+                    _args2 = arguments;
 
-                          for (_len = _args2.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-                            args[_key] = _args2[_key];
+                return _regenerator.default.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _this.setState({
+                          currentState: {
+                            type: "MSISDNEntry",
+                            result: RDS.Loading()
                           }
+                        });
 
-                          msisdn = args[2];
-                          tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', {
-                            msisdn: msisdn
-                          });
-                          _context2.prev = 4;
-                          _context2.next = 7;
-                          return _main.default.apply(void 0, args);
+                        for (_len = _args2.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+                          args[_key] = _args2[_key];
+                        }
 
-                        case 7:
-                          _submitPIN = _context2.sent;
-                          tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', {
-                            msisdn: msisdn
-                          });
-                          self.setState({
-                            currentState: {
-                              type: "PINEntry",
-                              result: RDS.NothingYet()
-                            },
-                            actions: _objectSpread({}, self.state.actions, {
-                              submitPIN: function () {
-                                var _submitPIN2 = _asyncToGenerator(
-                                /*#__PURE__*/
-                                _regenerator.default.mark(function _callee(pin) {
-                                  var _result, _errorType;
+                        msisdn = args[2];
+                        tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', {
+                          msisdn: msisdn
+                        });
+                        _context2.prev = 4;
+                        _context2.next = 7;
+                        return _main.default.apply(void 0, args);
 
-                                  return _regenerator.default.wrap(function _callee$(_context) {
-                                    while (1) {
-                                      switch (_context.prev = _context.next) {
-                                        case 0:
-                                          _this.setState({
-                                            currentState: {
-                                              type: "PINEntry",
-                                              result: RDS.Loading()
-                                            }
-                                          });
+                      case 7:
+                        _submitPIN = _context2.sent;
+                        tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', {
+                          msisdn: msisdn
+                        });
+                        self.setState({
+                          currentState: {
+                            type: "PINEntry",
+                            result: RDS.NothingYet()
+                          },
+                          actions: _objectSpread({}, self.state.actions, {
+                            submitPIN: function () {
+                              var _submitPIN2 = _asyncToGenerator(
+                              /*#__PURE__*/
+                              _regenerator.default.mark(function _callee(pin) {
+                                var _result, _errorType;
 
-                                          tracker.advancedInFlow('assrock/v1', 'pin-submitted', {
-                                            msisdn: msisdn,
-                                            pin: pin
-                                          });
-                                          _context.prev = 2;
-                                          _context.next = 5;
-                                          return _submitPIN(pin);
+                                return _regenerator.default.wrap(function _callee$(_context) {
+                                  while (1) {
+                                    switch (_context.prev = _context.next) {
+                                      case 0:
+                                        _this.setState({
+                                          currentState: {
+                                            type: "PINEntry",
+                                            result: RDS.Loading()
+                                          }
+                                        });
 
-                                        case 5:
-                                          _result = _context.sent;
-                                          tracker.advancedInFlow('assrock/v1', 'pin-submission-success', {
-                                            msisdn: msisdn,
-                                            pin: pin
-                                          });
+                                        tracker.advancedInFlow('assrock/v1', 'pin-submitted', {
+                                          msisdn: msisdn,
+                                          pin: pin
+                                        });
+                                        _context.prev = 2;
+                                        _context.next = 5;
+                                        return _submitPIN(pin);
 
-                                          _this.setState({
-                                            currentState: {
-                                              type: "PINEntry",
-                                              result: RDS.Success({
-                                                finalUrl: _result
-                                              })
-                                            }
-                                          });
+                                      case 5:
+                                        _result = _context.sent;
+                                        tracker.advancedInFlow('assrock/v1', 'pin-submission-success', {
+                                          msisdn: msisdn,
+                                          pin: pin
+                                        });
 
-                                          _context.next = 15;
-                                          break;
+                                        _this.setState({
+                                          currentState: {
+                                            type: "PINEntry",
+                                            result: RDS.Success({
+                                              finalUrl: _result
+                                            })
+                                          }
+                                        });
 
-                                        case 10:
-                                          _context.prev = 10;
-                                          _context.t0 = _context["catch"](2);
-                                          _errorType = "SEInvalidPIN" === _context.t0.type ? "InvalidPIN" : "UnknownError";
-                                          self.setState({
-                                            currentState: {
-                                              type: "PINEntry",
-                                              result: RDS.Failure({
-                                                errorType: _errorType
-                                              })
-                                            }
-                                          });
-                                          tracker.recedeInFlow('assrock/v1', 'pin-submission-failure', {
-                                            msisdn: msisdn,
-                                            pin: pin
-                                          });
+                                        _context.next = 15;
+                                        break;
 
-                                        case 15:
-                                        case "end":
-                                          return _context.stop();
-                                      }
+                                      case 10:
+                                        _context.prev = 10;
+                                        _context.t0 = _context["catch"](2);
+                                        _errorType = "SEInvalidPIN" === _context.t0.type ? "InvalidPIN" : "UnknownError";
+                                        self.setState({
+                                          currentState: {
+                                            type: "PINEntry",
+                                            result: RDS.Failure({
+                                              errorType: _errorType
+                                            })
+                                          }
+                                        });
+                                        tracker.recedeInFlow('assrock/v1', 'pin-submission-failure', {
+                                          msisdn: msisdn,
+                                          pin: pin
+                                        });
+
+                                      case 15:
+                                      case "end":
+                                        return _context.stop();
                                     }
-                                  }, _callee, this, [[2, 10]]);
-                                }));
+                                  }
+                                }, _callee, this, [[2, 10]]);
+                              }));
 
-                                function submitPIN(_x) {
-                                  return _submitPIN2.apply(this, arguments);
-                                }
+                              function submitPIN(_x) {
+                                return _submitPIN2.apply(this, arguments);
+                              }
 
-                                return submitPIN;
-                              }()
+                              return submitPIN;
+                            }()
+                          })
+                        });
+                        _context2.next = 17;
+                        break;
+
+                      case 12:
+                        _context2.prev = 12;
+                        _context2.t0 = _context2["catch"](4);
+                        _errorType2 = "SEAlreadySubscribed" === _context2.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context2.t0.type ? "InvalidMSISDN" : "UnknownError";
+                        self.setState({
+                          currentState: {
+                            type: "MSISDNEntry",
+                            result: RDS.Failure({
+                              errorType: _errorType2,
+                              error: _context2.t0
                             })
-                          });
-                          _context2.next = 17;
-                          break;
+                          }
+                        });
+                        tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', {
+                          msisdn: msisdn,
+                          errorType: _errorType2 || 'UnknownError'
+                        });
 
-                        case 12:
-                          _context2.prev = 12;
-                          _context2.t0 = _context2["catch"](4);
-                          _errorType2 = "SEAlreadySubscribed" === _context2.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context2.t0.type ? "InvalidMSISDN" : "UnknownError";
-                          self.setState({
-                            currentState: {
-                              type: "MSISDNEntry",
-                              result: RDS.Failure({
-                                errorType: _errorType2,
-                                error: _context2.t0
-                              })
-                            }
-                          });
-                          tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', {
-                            msisdn: msisdn,
-                            errorType: _errorType2 || 'UnknownError'
-                          });
-
-                        case 17:
-                        case "end":
-                          return _context2.stop();
-                      }
+                      case 17:
+                      case "end":
+                        return _context2.stop();
                     }
-                  }, _callee2, this, [[4, 12]]);
-                }));
-
-                function submitMSISDN() {
-                  return _submitMSISDN2.apply(this, arguments);
-                }
-
-                return submitMSISDN;
-              }(),
-              submitPIN: function submitPIN(_pin) {
-                return self.setState({
-                  currentState: {
-                    type: "PINEntry",
-                    result: RDS.Failure({
-                      errorType: "TooEarly"
-                    })
                   }
-                });
+                }, _callee2, this, [[4, 12]]);
+              }));
+
+              function submitMSISDN() {
+                return _submitMSISDN2.apply(this, arguments);
               }
+
+              return submitMSISDN;
+            }(),
+            submitPIN: function submitPIN(_pin) {
+              return self.setState({
+                currentState: {
+                  type: "PINEntry",
+                  result: RDS.Failure({
+                    errorType: "TooEarly"
+                  })
+                }
+              });
             }
-          };
-          return _this;
+          }
+        };
+        return _this;
+      }
+
+      _createClass(HOC, [{
+        key: "render",
+        value: function render() {
+          return React.createElement(Comp, _extends({}, this.props, {
+            currentState: this.state.currentState,
+            actions: this.state.actions
+          }));
         }
-
-        _createClass(HOC, [{
-          key: "render",
-          value: function render() {
-            return React.createElement(Comp, _extends({}, this.props, {
-              currentState: this.state.currentState,
-              actions: this.state.actions
-            }));
-          }
-        }, {
-          key: "__reactstandin__regenerateByEval",
+      }, {
+        key: "__reactstandin__regenerateByEval",
+        // @ts-ignore
+        value: function __reactstandin__regenerateByEval(key, code) {
           // @ts-ignore
-          value: function __reactstandin__regenerateByEval(key, code) {
-            // @ts-ignore
-            this[key] = eval(code);
-          }
-        }]);
+          this[key] = eval(code);
+        }
+      }]);
 
-        return HOC;
-      }(React.PureComponent)
-    );
+      return HOC;
+    }(React.PureComponent), _temp;
   };
 };
 

@@ -19,18 +19,28 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var defaultConfig = function defaultConfig(country, offer) {
-  switch (country) {
+var defaultConfig = function defaultConfig(offer) {
+  switch (process.env.country) {
     case "my":
       return {
         offer: offer || 1,
-        host: "m.gamezones.biz",
-        country: "my",
-        handle: "api-handle"
+        host: 'm.gamezones.biz',
+        country: 'my',
+        handle: 'api-handle'
       };
 
+    case "gh":
+      {
+        return {
+          offer: offer || 1,
+          host: 'w1.mozzi.com',
+          country: 'gh',
+          handle: 'secure-pro'
+        };
+      }
+
     default:
-      throw "'country' environment variable is either missing or has an unsupported value (".concat(country, "). This is necessary for defaultConfig(offer).");
+      throw "'country' environment variable is either missing or has an unsupported value (".concat(process.env.country, "). This is necessary for defaultConfig(offer).");
   }
 };
 
@@ -42,40 +52,39 @@ function _submitMSISDN() {
   _submitMSISDN = _asyncToGenerator(
   /*#__PURE__*/
   _regenerator.default.mark(function _callee(window, maybeConfig, msisdn) {
-    var visitor, config, _ref, host, country, handle, offer, search, result, error;
+    var config, _ref, host, country, handle, offer, search, result, error;
 
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            visitor = window.pac_analytics.visitor;
             config = !maybeConfig ? {
-              offer: visitor.offer
+              offer: window.pac_analytics.visitor.offer
             } : maybeConfig;
-            _ref = !config.host || !config.handle ? defaultConfig(process.env.REACT_APP_COUNTRY, config.offer) : config, host = _ref.host, country = _ref.country, handle = _ref.handle, offer = _ref.offer;
-            search = window.location.search.substr(1) || "";
-            _context.next = 6;
-            return fetch("https://lp-api.sam-media.com/v1/submit_msisdn_mo/".concat(host, "/").concat(country, "/").concat(handle, "/").concat(offer, "/?msisdn=").concat(msisdn, "&rockman_id=").concat(visitor.rockmanId, "&").concat(search)).then(function (x) {
+            _ref = !config.host || !config.handle || !config.country ? defaultConfig(config.offer) : config, host = _ref.host, country = _ref.country, handle = _ref.handle, offer = _ref.offer;
+            search = window.location.search.substr(1) || '';
+            _context.next = 5;
+            return fetch("https://lp-api.sam-media.com/v1/submit_msisdn_mo/".concat(host, "/").concat(country, "/").concat(handle, "/").concat(offer, "/?msisdn=").concat(msisdn, "&rockman_id=").concat(window.pac_analytics.visitor.rockmanId, "&").concat(search)).then(function (x) {
               return x.json();
             });
 
-          case 6:
+          case 5:
             result = _context.sent;
 
             if (result.isValid) {
-              _context.next = 14;
+              _context.next = 13;
               break;
             }
 
             error = new Error("".concat(result.errorType, ":\n").concat(result.errorText));
-            error["type"] = result.errorType;
+            error['type'] = result.errorType;
             console.error(error);
             throw error;
 
-          case 14:
+          case 13:
             return _context.abrupt("return", result.keyword);
 
-          case 15:
+          case 14:
           case "end":
             return _context.stop();
         }
@@ -96,8 +105,8 @@ function _submitMSISDN() {
     return;
   }
 
-  reactHotLoader.register(defaultConfig, "defaultConfig", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/api.ts");
-  reactHotLoader.register(submitMSISDN, "submitMSISDN", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/api.ts");
+  reactHotLoader.register(defaultConfig, "defaultConfig", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/main.ts");
+  reactHotLoader.register(submitMSISDN, "submitMSISDN", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/assrock-mo/main.ts");
   leaveModule(module);
 })();
 

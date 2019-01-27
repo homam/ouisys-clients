@@ -67,62 +67,63 @@ function match(matcher) {
 
 var _default = function _default(tracker, maybeConfig, Comp) {
   return function (initState) {
-    return (
-      /*#__PURE__*/
-      function (_React$PureComponent) {
-        _inherits(HOC, _React$PureComponent);
+    var _temp;
 
-        function HOC() {
-          var _getPrototypeOf2;
+    return _temp =
+    /*#__PURE__*/
+    function (_React$PureComponent) {
+      _inherits(HOC, _React$PureComponent);
 
-          var _this;
+      function HOC() {
+        var _getPrototypeOf2;
 
-          _classCallCheck(this, HOC);
+        var _this;
 
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
+        _classCallCheck(this, HOC);
 
-          _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(HOC)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
-            current: initState
-          });
-
-          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "actions", {
-            onClick: function onClick() {
-              var url = getRedirectUrl(maybeConfig || {});
-              tracker.advancedInFlow('one-click/v1', 'click', {
-                url: url
-              });
-              window.location.href = url;
-            }
-          });
-
-          return _this;
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
         }
 
-        _createClass(HOC, [{
-          key: "render",
-          value: function render() {
-            var self = this;
-            return React.createElement(Comp, _extends({
-              actions: self.actions,
-              currentState: self.state.current
-            }, this.props));
-          }
-        }, {
-          key: "__reactstandin__regenerateByEval",
-          // @ts-ignore
-          value: function __reactstandin__regenerateByEval(key, code) {
-            // @ts-ignore
-            this[key] = eval(code);
-          }
-        }]);
+        _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(HOC)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-        return HOC;
-      }(React.PureComponent)
-    );
+        _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+          current: initState
+        });
+
+        _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "actions", {
+          onClick: function onClick() {
+            var url = getRedirectUrl(maybeConfig || {});
+            tracker.advancedInFlow('one-click/v1', 'click', {
+              url: url
+            });
+            window.location.href = url;
+          }
+        });
+
+        return _this;
+      }
+
+      _createClass(HOC, [{
+        key: "render",
+        value: function render() {
+          var self = this;
+          return React.createElement(Comp, _extends({
+            actions: self.actions,
+            currentState: self.state.current
+          }, this.props));
+        }
+      }, {
+        key: "__reactstandin__regenerateByEval",
+        // @ts-ignore
+        value: function __reactstandin__regenerateByEval(key, code) {
+          // @ts-ignore
+          this[key] = eval(code);
+        }
+      }]);
+
+      return HOC;
+    }(React.PureComponent), _temp;
   };
 };
 

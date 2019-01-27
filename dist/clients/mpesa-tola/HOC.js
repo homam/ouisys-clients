@@ -58,99 +58,100 @@ function MatchSuccess(matcher) {
 var _default = function _default(tracker, visitor) {
   return function (Comp) {
     return function (initState) {
-      return (
-        /*#__PURE__*/
-        function (_React$Component) {
-          _inherits(HOC, _React$Component);
+      var _temp;
 
-          function HOC(props) {
-            var _this;
+      return _temp =
+      /*#__PURE__*/
+      function (_React$Component) {
+        _inherits(HOC, _React$Component);
 
-            _classCallCheck(this, HOC);
+        function HOC(props) {
+          var _this;
 
-            _this = _possibleConstructorReturn(this, _getPrototypeOf(HOC).call(this, props));
+          _classCallCheck(this, HOC);
 
-            _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", void 0);
+          _this = _possibleConstructorReturn(this, _getPrototypeOf(HOC).call(this, props));
 
-            _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "actions", void 0);
+          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", void 0);
 
-            _this.state = {
-              current: initState
-            };
+          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "actions", void 0);
 
-            var self = _assertThisInitialized(_assertThisInitialized(_this));
+          _this.state = {
+            current: initState
+          };
 
-            _this.actions = {
-              chargeAndWait: function chargeAndWait(msisdn, message, price) {
-                if (!msisdn || msisdn.length == 0) {
-                  self.setState({
-                    current: RDS.Failure({
-                      type: "InvalidMSISDN"
-                    })
-                  });
-                  return;
-                }
+          var self = _assertThisInitialized(_assertThisInitialized(_this));
 
-                return TAPI.chargeAndWait(visitor, msisdn, message, price, function (st) {
-                  self.setState({
-                    current: st
-                  });
-                  RDS.match({
-                    loading: function loading() {
-                      return tracker.advancedInFlow('tola', 'chargeAndWait', {
-                        msisdn: msisdn,
-                        message: message,
-                        price: price
-                      });
-                    },
-                    success: function success() {
-                      return tracker.advancedInFlow('tola', 'success', {
-                        msisdn: msisdn,
-                        message: message,
-                        price: price
-                      });
-                    },
-                    failure: function failure(error) {
-                      return tracker.recedeInFlow('tola', 'failure', {
-                        error: error.type
-                      });
-                    },
-                    nothingYet: function nothingYet() {
-                      return void 8;
-                    }
-                  })(st);
+          _this.actions = {
+            chargeAndWait: function chargeAndWait(msisdn, message, price) {
+              if (!msisdn || msisdn.length == 0) {
+                self.setState({
+                  current: RDS.Failure({
+                    type: "InvalidMSISDN"
+                  })
                 });
-              },
-              backToNothingYet: function backToNothingYet() {
-                return self.setState({
-                  current: RDS.NothingYet()
-                });
+                return;
               }
-            };
-            return _this;
+
+              return TAPI.chargeAndWait(visitor, msisdn, message, price, function (st) {
+                self.setState({
+                  current: st
+                });
+                RDS.match({
+                  loading: function loading() {
+                    return tracker.advancedInFlow('tola', 'chargeAndWait', {
+                      msisdn: msisdn,
+                      message: message,
+                      price: price
+                    });
+                  },
+                  success: function success() {
+                    return tracker.advancedInFlow('tola', 'success', {
+                      msisdn: msisdn,
+                      message: message,
+                      price: price
+                    });
+                  },
+                  failure: function failure(error) {
+                    return tracker.recedeInFlow('tola', 'failure', {
+                      error: error.type
+                    });
+                  },
+                  nothingYet: function nothingYet() {
+                    return void 8;
+                  }
+                })(st);
+              });
+            },
+            backToNothingYet: function backToNothingYet() {
+              return self.setState({
+                current: RDS.NothingYet()
+              });
+            }
+          };
+          return _this;
+        }
+
+        _createClass(HOC, [{
+          key: "render",
+          value: function render() {
+            var self = this;
+            return React.createElement(Comp, _extends({
+              actions: self.actions,
+              currentState: self.state.current
+            }, this.props));
           }
-
-          _createClass(HOC, [{
-            key: "render",
-            value: function render() {
-              var self = this;
-              return React.createElement(Comp, _extends({
-                actions: self.actions,
-                currentState: self.state.current
-              }, this.props));
-            }
-          }, {
-            key: "__reactstandin__regenerateByEval",
+        }, {
+          key: "__reactstandin__regenerateByEval",
+          // @ts-ignore
+          value: function __reactstandin__regenerateByEval(key, code) {
             // @ts-ignore
-            value: function __reactstandin__regenerateByEval(key, code) {
-              // @ts-ignore
-              this[key] = eval(code);
-            }
-          }]);
+            this[key] = eval(code);
+          }
+        }]);
 
-          return HOC;
-        }(React.Component)
-      );
+        return HOC;
+      }(React.Component), _temp;
     };
   };
 };

@@ -4,7 +4,7 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "jsx": "react",
     "declaration": true,
     "allowJs": false,
@@ -16,6 +16,6 @@
     "lib": ["es5", "es2015", "dom", "scripthost"], 
     "typeRoots": ["node_modules/@types", "src/@types"],
   },
-  "include": ["src/**/*", "ssr/**/*", "webpack/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts", "node_modules", "webpack/**/*"]
 }

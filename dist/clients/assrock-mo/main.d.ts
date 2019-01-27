@@ -1,9 +1,9 @@
-export interface IConfig {
+export declare type IConfig = {
     host?: string;
-    handle?: string;
     country?: string;
+    handle?: string;
     offer: number;
-}
+};
 export declare type IKeywordShortcode = {
     keyword: string;
     shortcode: string;
