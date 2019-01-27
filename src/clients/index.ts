@@ -1,3 +1,3 @@
-import * as mPesaTola from "./mpesa-tola"
+import * as mPesaTola from "./tola-mpesa"
 
 export default {mPesaTola}

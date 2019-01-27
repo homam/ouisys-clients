@@ -99,138 +99,137 @@ function match(_ref) {
 
 var _default = function _default(tracker, Comp) {
   return function (initialState) {
-    var _temp;
+    return (
+      /*#__PURE__*/
+      function (_React$PureComponent) {
+        _inherits(HOC, _React$PureComponent);
 
-    return _temp =
-    /*#__PURE__*/
-    function (_React$PureComponent) {
-      _inherits(HOC, _React$PureComponent);
+        function HOC(props) {
+          var _this;
 
-      function HOC(props) {
-        var _this;
+          _classCallCheck(this, HOC);
 
-        _classCallCheck(this, HOC);
+          _this = _possibleConstructorReturn(this, _getPrototypeOf(HOC).call(this, props));
 
-        _this = _possibleConstructorReturn(this, _getPrototypeOf(HOC).call(this, props));
+          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", void 0);
 
-        _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", void 0);
+          var self = _assertThisInitialized(_assertThisInitialized(_this));
 
-        var self = _assertThisInitialized(_assertThisInitialized(_this));
+          _this.state = {
+            currentState: initialState,
+            actions: {
+              backToStart: function backToStart() {
+                _this.setState({
+                  currentState: initialState
+                });
+              },
+              submitMSISDN: function () {
+                var _submitMSISDN2 = _asyncToGenerator(
+                /*#__PURE__*/
+                _regenerator.default.mark(function _callee() {
+                  var _len,
+                      args,
+                      _key,
+                      msisdn,
+                      _keywordAndShortcode,
+                      _errorType,
+                      _args = arguments;
 
-        _this.state = {
-          currentState: initialState,
-          actions: {
-            backToStart: function backToStart() {
-              _this.setState({
-                currentState: initialState
-              });
-            },
-            submitMSISDN: function () {
-              var _submitMSISDN2 = _asyncToGenerator(
-              /*#__PURE__*/
-              _regenerator.default.mark(function _callee() {
-                var _len,
-                    args,
-                    _key,
-                    msisdn,
-                    _keywordAndShortcode,
-                    _errorType,
-                    _args = arguments;
+                  return _regenerator.default.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _this.setState({
+                            currentState: {
+                              type: "MSISDNEntry",
+                              result: RDS.Loading()
+                            }
+                          });
 
-                return _regenerator.default.wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        _this.setState({
-                          currentState: {
-                            type: "MSISDNEntry",
-                            result: RDS.Loading()
+                          for (_len = _args.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+                            args[_key] = _args[_key];
                           }
-                        });
 
-                        for (_len = _args.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-                          args[_key] = _args[_key];
-                        }
+                          msisdn = args[2];
+                          tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', {
+                            msisdn: msisdn
+                          });
+                          _context.prev = 4;
+                          _context.next = 7;
+                          return _main.default.apply(void 0, args);
 
-                        msisdn = args[2];
-                        tracker.advancedInFlow('assrock/v1', 'msisdn-submitted', {
-                          msisdn: msisdn
-                        });
-                        _context.prev = 4;
-                        _context.next = 7;
-                        return _main.default.apply(void 0, args);
+                        case 7:
+                          _keywordAndShortcode = _context.sent;
+                          tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', {
+                            msisdn: msisdn
+                          });
+                          self.setState({
+                            currentState: {
+                              type: "MSISDNEntry",
+                              result: RDS.Success(_keywordAndShortcode)
+                            },
+                            actions: _objectSpread({}, self.state.actions)
+                          });
+                          _context.next = 17;
+                          break;
 
-                      case 7:
-                        _keywordAndShortcode = _context.sent;
-                        tracker.advancedInFlow('assrock/v1', 'msisdn-submission-success', {
-                          msisdn: msisdn
-                        });
-                        self.setState({
-                          currentState: {
-                            type: "MSISDNEntry",
-                            result: RDS.Success(_keywordAndShortcode)
-                          },
-                          actions: _objectSpread({}, self.state.actions)
-                        });
-                        _context.next = 17;
-                        break;
+                        case 12:
+                          _context.prev = 12;
+                          _context.t0 = _context["catch"](4);
+                          _errorType = "SEAlreadySubscribed" === _context.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context.t0.type ? "InvalidMSISDN" : "UnknownError";
+                          self.setState({
+                            currentState: {
+                              type: "MSISDNEntry",
+                              result: RDS.Failure({
+                                errorType: _errorType,
+                                error: _context.t0
+                              })
+                            }
+                          });
+                          tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', {
+                            msisdn: msisdn,
+                            errorType: _errorType || 'UnknownError'
+                          });
 
-                      case 12:
-                        _context.prev = 12;
-                        _context.t0 = _context["catch"](4);
-                        _errorType = "SEAlreadySubscribed" === _context.t0.type ? "AlreadySubscribed" : "SEInvalidMSISDN" == _context.t0.type ? "InvalidMSISDN" : "UnknownError";
-                        self.setState({
-                          currentState: {
-                            type: "MSISDNEntry",
-                            result: RDS.Failure({
-                              errorType: _errorType,
-                              error: _context.t0
-                            })
-                          }
-                        });
-                        tracker.recedeInFlow('assrock/v1', 'msisdn-submission-failure', {
-                          msisdn: msisdn,
-                          errorType: _errorType || 'UnknownError'
-                        });
-
-                      case 17:
-                      case "end":
-                        return _context.stop();
+                        case 17:
+                        case "end":
+                          return _context.stop();
+                      }
                     }
-                  }
-                }, _callee, this, [[4, 12]]);
-              }));
+                  }, _callee, this, [[4, 12]]);
+                }));
 
-              function submitMSISDN() {
-                return _submitMSISDN2.apply(this, arguments);
-              }
+                function submitMSISDN() {
+                  return _submitMSISDN2.apply(this, arguments);
+                }
 
-              return submitMSISDN;
-            }()
+                return submitMSISDN;
+              }()
+            }
+          };
+          return _this;
+        }
+
+        _createClass(HOC, [{
+          key: "render",
+          value: function render() {
+            return React.createElement(Comp, _extends({}, this.props, {
+              currentState: this.state.currentState,
+              actions: this.state.actions
+            }));
           }
-        };
-        return _this;
-      }
-
-      _createClass(HOC, [{
-        key: "render",
-        value: function render() {
-          return React.createElement(Comp, _extends({}, this.props, {
-            currentState: this.state.currentState,
-            actions: this.state.actions
-          }));
-        }
-      }, {
-        key: "__reactstandin__regenerateByEval",
-        // @ts-ignore
-        value: function __reactstandin__regenerateByEval(key, code) {
+        }, {
+          key: "__reactstandin__regenerateByEval",
           // @ts-ignore
-          this[key] = eval(code);
-        }
-      }]);
+          value: function __reactstandin__regenerateByEval(key, code) {
+            // @ts-ignore
+            this[key] = eval(code);
+          }
+        }]);
 
-      return HOC;
-    }(React.PureComponent), _temp;
+        return HOC;
+      }(React.PureComponent)
+    );
   };
 };
 

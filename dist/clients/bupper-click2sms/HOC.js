@@ -67,133 +67,132 @@ exports.mockedLoadingState = mockedLoadingState;
 
 var _default = function _default(tracker, Comp, maybeConfig) {
   return function (initialState) {
-    var _temp;
+    return (
+      /*#__PURE__*/
+      function (_React$PureComponent) {
+        _inherits(HOC, _React$PureComponent);
 
-    return _temp =
-    /*#__PURE__*/
-    function (_React$PureComponent) {
-      _inherits(HOC, _React$PureComponent);
+        function HOC() {
+          var _getPrototypeOf2;
 
-      function HOC() {
-        var _getPrototypeOf2;
+          var _this;
 
-        var _this;
+          _classCallCheck(this, HOC);
 
-        _classCallCheck(this, HOC);
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
 
-        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
+          _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(HOC)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+          _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+            currentState: initialState
+          });
+
+          return _this;
         }
 
-        _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(HOC)).call.apply(_getPrototypeOf2, [this].concat(args)));
+        _createClass(HOC, [{
+          key: "componentDidMount",
+          value: function componentDidMount() {
+            var _this2 = this;
 
-        _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
-          currentState: initialState
-        });
-
-        return _this;
-      }
-
-      _createClass(HOC, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-          var _this2 = this;
-
-          this.setState({
-            currentState: RDS.Loading()
-          });
-          (0, _main.default)(window, maybeConfig).then(function (x) {
-            return _this2.setState({
-              currentState: RDS.Success(x)
+            this.setState({
+              currentState: RDS.Loading()
             });
-          }).catch(function (e) {
-            return _this2.setState({
-              currentState: RDS.Failure(e.toString())
+            (0, _main.default)(window, maybeConfig).then(function (x) {
+              return _this2.setState({
+                currentState: RDS.Success(x)
+              });
+            }).catch(function (e) {
+              return _this2.setState({
+                currentState: RDS.Failure(e.toString())
+              });
             });
-          });
-        }
-      }, {
-        key: "render",
-        value: function render() {
-          var moLink = RDS.match({
-            nothingYet: function nothingYet() {
-              return function (_ref) {
-                var children = _ref.children,
-                    props = _objectWithoutProperties(_ref, ["children"]);
+          }
+        }, {
+          key: "render",
+          value: function render() {
+            var moLink = RDS.match({
+              nothingYet: function nothingYet() {
+                return function (_ref) {
+                  var children = _ref.children,
+                      props = _objectWithoutProperties(_ref, ["children"]);
 
-                return React.createElement("a", _extends({
-                  "data-state": "nothingYet",
-                  onClick: function onClick() {
-                    return console.info("nothingYet");
-                  },
-                  href: "javascript: void(0)"
-                }, props), children);
-              };
-            },
-            loading: function loading() {
-              return function (_ref2) {
-                var children = _ref2.children,
-                    props = _objectWithoutProperties(_ref2, ["children"]);
-
-                return React.createElement("a", _extends({
-                  "data-state": "loading",
-                  onClick: function onClick() {
-                    return console.info("loading");
-                  },
-                  href: "javascript: void(0)"
-                }, props), children);
-              };
-            },
-            failure: function failure(error) {
-              return function (_ref3) {
-                var children = _ref3.children,
-                    props = _objectWithoutProperties(_ref3, ["children"]);
-
-                return React.createElement("a", _extends({
-                  "data-state": "failure",
-                  onClick: function onClick() {
-                    return console.error(error);
-                  },
-                  href: "javascript: void(0)"
-                }, props), children);
-              };
-            },
-            success: function success(keywordAndShortcode) {
-              return function (_ref4) {
-                var children = _ref4.children,
-                    keyword = _ref4.keyword,
-                    shortcode = _ref4.shortcode,
-                    props = _objectWithoutProperties(_ref4, ["children", "keyword", "shortcode"]);
-
-                var keywordAndShortcode1 = {
-                  keyword: keyword || keywordAndShortcode.keyword,
-                  shortcode: shortcode || keywordAndShortcode.shortcode
+                  return React.createElement("a", _extends({
+                    "data-state": "nothingYet",
+                    onClick: function onClick() {
+                      return console.info("nothingYet");
+                    },
+                    href: "javascript: void(0)"
+                  }, props), children);
                 };
-                return React.createElement(_HOC.MOLink, _extends({
-                  onClick: function onClick() {
-                    return tracker.advancedInFlow("click2sms", "click", keywordAndShortcode1);
-                  },
-                  keywordAndShortcode: keywordAndShortcode1
-                }, props), children);
-              };
-            }
-          })(this.state.currentState);
-          return React.createElement(Comp, _extends({}, this.props, {
-            currentState: this.state.currentState,
-            MOLink: moLink
-          }));
-        }
-      }, {
-        key: "__reactstandin__regenerateByEval",
-        // @ts-ignore
-        value: function __reactstandin__regenerateByEval(key, code) {
-          // @ts-ignore
-          this[key] = eval(code);
-        }
-      }]);
+              },
+              loading: function loading() {
+                return function (_ref2) {
+                  var children = _ref2.children,
+                      props = _objectWithoutProperties(_ref2, ["children"]);
 
-      return HOC;
-    }(React.PureComponent), _temp;
+                  return React.createElement("a", _extends({
+                    "data-state": "loading",
+                    onClick: function onClick() {
+                      return console.info("loading");
+                    },
+                    href: "javascript: void(0)"
+                  }, props), children);
+                };
+              },
+              failure: function failure(error) {
+                return function (_ref3) {
+                  var children = _ref3.children,
+                      props = _objectWithoutProperties(_ref3, ["children"]);
+
+                  return React.createElement("a", _extends({
+                    "data-state": "failure",
+                    onClick: function onClick() {
+                      return console.error(error);
+                    },
+                    href: "javascript: void(0)"
+                  }, props), children);
+                };
+              },
+              success: function success(keywordAndShortcode) {
+                return function (_ref4) {
+                  var children = _ref4.children,
+                      keyword = _ref4.keyword,
+                      shortcode = _ref4.shortcode,
+                      props = _objectWithoutProperties(_ref4, ["children", "keyword", "shortcode"]);
+
+                  var keywordAndShortcode1 = {
+                    keyword: keyword || keywordAndShortcode.keyword,
+                    shortcode: shortcode || keywordAndShortcode.shortcode
+                  };
+                  return React.createElement(_HOC.MOLink, _extends({
+                    onClick: function onClick() {
+                      return tracker.advancedInFlow("click2sms", "click", keywordAndShortcode1);
+                    },
+                    keywordAndShortcode: keywordAndShortcode1
+                  }, props), children);
+                };
+              }
+            })(this.state.currentState);
+            return React.createElement(Comp, _extends({}, this.props, {
+              currentState: this.state.currentState,
+              MOLink: moLink
+            }));
+          }
+        }, {
+          key: "__reactstandin__regenerateByEval",
+          // @ts-ignore
+          value: function __reactstandin__regenerateByEval(key, code) {
+            // @ts-ignore
+            this[key] = eval(code);
+          }
+        }]);
+
+        return HOC;
+      }(React.PureComponent)
+    );
   };
 };
 

@@ -5,7 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var mPesaTola = _interopRequireWildcard(require("./tola-mpesa"));
+var API = _interopRequireWildcard(require("./TolaAPI"));
+
+var State = _interopRequireWildcard(require("./TolaState"));
+
+var HOC = _interopRequireWildcard(require("./HOC"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -16,7 +20,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 })();
 
 var _default = {
-  mPesaTola: mPesaTola
+  API: API,
+  State: State,
+  HOC: HOC
 };
 var _default2 = _default;
 exports.default = _default2;
@@ -31,7 +37,7 @@ exports.default = _default2;
     return;
   }
 
-  reactHotLoader.register(_default, "default", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/index.ts");
+  reactHotLoader.register(_default, "default", "/Users/homam/dev/sam/os/ouisys-clients/src/clients/tola-mpesa/index.ts");
   leaveModule(module);
 })();
 

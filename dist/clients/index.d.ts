@@ -1,4 +1,4 @@
-import * as mPesaTola from "./mpesa-tola";
+import * as mPesaTola from "./tola-mpesa";
 declare const _default: {
     mPesaTola: typeof mPesaTola;
 };
