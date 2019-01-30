@@ -22,7 +22,7 @@ type ACompType =
     React.ComponentType<{children: React.ReactNode} & React.HTMLAttributes<HTMLAnchorElement> & {keyword?: string, shortcode?: string}>
 export default <P extends {}>(tracker: ITracker, Comp: React.ComponentType<P & HOCProps>, maybeConfig?: IConfig) => (
   initialState: State
-) =>
+) : React.ComponentType =>
   class HOC extends React.PureComponent<P> {
     state = {
       currentState: initialState
