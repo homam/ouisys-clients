@@ -1,11 +1,13 @@
 import * as React from "react"
 import { ITracker } from "../../pacman/record";
 
-type IState = "NothingYet" | "Clicked";
+type IState = "NothingYet"
+
 type IActions = {
-  onClick: () => void
+  onClick: () => void,
+  testUrl:() => string
 }
-export type IProps = {
+export type HOCProps= {
   currentState: IState;
   actions: IActions;
 };
@@ -38,7 +40,7 @@ export function match<R>
   { return (state: IState) =>  state == "NothingYet" ? matcher.nothingYet() : <div>...</div>}
 
 
-export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentType<IProps>) => (initState: IState) => 
+export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentType<HOCProps>) => (initState: IState) => 
   class HOC extends React.PureComponent<any,{current: IState}> {
     state = {
       current: initState
@@ -48,6 +50,11 @@ export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentTy
         const url = getRedirectUrl(maybeConfig || {})
         tracker.advancedInFlow('one-click/v1', 'click', {url})
         window.location.href = url
+      },
+      testUrl: ()=>{
+        const url = getRedirectUrl(maybeConfig || {})
+        tracker.advancedInFlow('one-click/v1', 'click', {url})
+        return url
       }
     } as IActions; 
 

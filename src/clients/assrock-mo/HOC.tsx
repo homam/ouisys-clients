@@ -118,13 +118,3 @@ export default <P extends HOCProps>(tracker: ITracker, Comp: React.ComponentType
       );
     }
   };
-
-const formatSMSLink = (keywordAndShortcode : IKeywordShortcode) =>
-  (typeof navigator != "undefined" && (/iPhone/i.test(navigator.userAgent) || /Mac OS/i.test(navigator.userAgent)))
-  ? `sms:${keywordAndShortcode.shortcode}&body=${keywordAndShortcode.keyword}`
-  : `sms:${keywordAndShortcode.shortcode}?body=${keywordAndShortcode.keyword}`
-
- 
-
-export const MOLink : React.ComponentType<{keywordAndShortcode: IKeywordShortcode, children: React.ReactNode} & React.HTMLAttributes<HTMLAnchorElement>> = ({keywordAndShortcode, children, ...props}) =>
-  <a href={formatSMSLink(keywordAndShortcode)} {...props}>{children}</a>
