@@ -5,7 +5,12 @@ type IState = "NothingYet"
 
 type IActions = {
   onClick: () => void,
-  testUrl:() => string
+  productUrl:() => any
+}
+
+type IProductUrl = {
+  className: string,
+  name: string
 }
 export type HOCProps= {
   currentState: IState;
@@ -51,10 +56,13 @@ export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentTy
         tracker.advancedInFlow('one-click/v1', 'click', {url})
         window.location.href = url
       },
-      testUrl: ()=>{
+      productUrl: (name: string, className: string)=>{
         const url = getRedirectUrl(maybeConfig || {})
-        tracker.advancedInFlow('one-click/v1', 'click', {url})
-        return url
+        //Enclosed this to avoid tracker being triggered on page render;
+        const fireTracker = ()=>{
+          tracker.advancedInFlow('one-click/v1', 'click', {url})
+        };
+        return <a href={url} onClick={() => fireTracker()} className={className}>{name || "Subscribe"}</a>
       }
     } as IActions; 
 

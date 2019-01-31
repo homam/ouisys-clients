@@ -3,7 +3,7 @@ import { ITracker } from "../../pacman/record";
 declare type IState = "NothingYet";
 declare type IActions = {
     onClick: () => void;
-    testUrl: () => string;
+    productUrl: () => any;
 };
 export declare type HOCProps = {
     currentState: IState;

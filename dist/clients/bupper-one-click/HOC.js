@@ -97,12 +97,22 @@ var _default = function _default(tracker, maybeConfig, Comp) {
               });
               window.location.href = url;
             },
-            testUrl: function testUrl() {
-              var url = getRedirectUrl(maybeConfig || {});
-              tracker.advancedInFlow('one-click/v1', 'click', {
-                url: url
-              });
-              return url;
+            productUrl: function productUrl(name, className) {
+              var url = getRedirectUrl(maybeConfig || {}); //Enclosed this to avoid tracker being triggered on page render;
+
+              var fireTracker = function fireTracker() {
+                tracker.advancedInFlow('one-click/v1', 'click', {
+                  url: url
+                });
+              };
+
+              return React.createElement("a", {
+                href: url,
+                onClick: function onClick() {
+                  return fireTracker();
+                },
+                className: className
+              }, name || "Subscribe");
             }
           });
 
