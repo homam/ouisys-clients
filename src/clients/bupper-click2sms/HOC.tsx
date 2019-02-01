@@ -2,7 +2,7 @@ import * as React from "react";
 import * as RDS from "../../common-types/RemoteDataState";
 import { ITracker } from "../../pacman/record";
 import load, { IKeywordShortcode, IConfig } from "./main";
-import { MOLink } from "../assrock-mo/HOC"
+import { MOLink } from "../common-components/MOLink";
 
 export type State = RDS.RemoteDataState<string, IKeywordShortcode>
 

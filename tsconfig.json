@@ -16,6 +16,6 @@
     "lib": ["es5", "es2015", "dom", "scripthost"], 
     "typeRoots": ["node_modules/@types", "src/@types"],
   },
-  "include": ["src/**/*", "dev-tools/**/*.ts"],
+  "include": ["src/**/*"],
   "exclude": ["**/*.spec.ts", "node_modules", "webpack/**/*"]
 }
