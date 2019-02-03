@@ -11,3 +11,4 @@ bower_components/
 *.css.d.ts
 *.less.d.ts
 vscode
+dist/
