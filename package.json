@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha --require isomorphic-fetch -r ts-node/register src/**/*.test.ts*",
+    "test": "TS_NODE_FILES=true mocha --require isomorphic-fetch --timeout 10000 -r ts-node/register -r ./src/__tests__/domMocker.js src/**/*.test.ts",
     "build": "npx babel ./src --out-dir dist --extensions \".ts,.tsx\" && yarn build:types",
     "build:types": "tsc --emitDeclarationOnly",
     "build:init": "tsc --init --declaration --allowSyntheticDefaultImports --target esnext --outDir dist"
@@ -87,8 +87,14 @@
     "@types/mocha": "^5.2.5",
     "@types/react-test-renderer": "^16.0.3",
     "chai": "^4.2.0",
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^5.2.0",
     "react-test-renderer": "^16.7.0",
     "ts-node": "^8.0.2"
+  },
+  "resolutions": {
+    "@types/react": "^16.7.13",
+    "@types/react-dom": "^16.0.11"
   }
 }
