@@ -1,11 +1,18 @@
 import * as React from "react"
 import { ITracker } from "../../pacman/record";
 
-type IState = "NothingYet" | "Clicked";
+type IState = "NothingYet"
+
 type IActions = {
-  onClick: () => void
+  onClick: () => void,
+  productUrl:() => any
 }
-export type IProps = {
+
+type IProductUrl = {
+  className: string,
+  name: string
+}
+export type HOCProps= {
   currentState: IState;
   actions: IActions;
 };
@@ -38,7 +45,7 @@ export function match<R>
   { return (state: IState) =>  state == "NothingYet" ? matcher.nothingYet() : <div>...</div>}
 
 
-export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentType<IProps>) => (initState: IState) => 
+export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentType<HOCProps>) => (initState: IState) => 
   class HOC extends React.PureComponent<any,{current: IState}> {
     state = {
       current: initState
@@ -48,6 +55,14 @@ export default (tracker: ITracker, maybeConfig: IConfig, Comp: React.ComponentTy
         const url = getRedirectUrl(maybeConfig || {})
         tracker.advancedInFlow('one-click/v1', 'click', {url})
         window.location.href = url
+      },
+      productUrl: (name: string, className: string)=>{
+        const url = getRedirectUrl(maybeConfig || {})
+        //Enclosed this to avoid tracker being triggered on page render;
+        const fireTracker = ()=>{
+          tracker.advancedInFlow('one-click/v1', 'click', {url})
+        };
+        return <a href={url} onClick={() => fireTracker()} className={className}>{name || "Subscribe"}</a>
       }
     } as IActions; 
 
